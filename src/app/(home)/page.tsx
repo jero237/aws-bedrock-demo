@@ -27,7 +27,7 @@ export default async function HomePage() {
         href={session ? routes.dashboard : routes.login}
         className={cn(buttonVariants(), "w-48")}
       >
-        {session ? "Dashboard" : "Start"}
+        {session ? "Start Chatting" : "Start"}
       </Link>
     </section>
   );
