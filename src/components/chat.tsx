@@ -4,7 +4,7 @@ import ChatItem from "./chat-item";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Session } from "next-auth";
-import { sendLamaPrompt } from "@/app/actions/chat";
+import { sendLamaPrompt } from "@/actions/chat";
 import { nanoid } from "nanoid";
 import { Loader2, Trash } from "lucide-react";
 import CustomAlertDialog from "./alert-dialog";
@@ -22,12 +22,19 @@ interface Message {
   key: string;
 }
 
+const MAX_INPUT_LENGTH = 100;
+
 export default function Chat({ session }: { session: Session | null }) {
   const bottomRef = React.useRef<null | HTMLDivElement>(null);
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState<string>("");
   const [loadingNewMessage, setLoadingNewMessage] =
     React.useState<boolean>(false);
+
+  const handleInputChange = (e: any) => {
+    if (e.target.value.length > MAX_INPUT_LENGTH) return;
+    setInput(e.target.value);
+  }
 
   const loadMessages = async (message: string) => {
     const savedMessages = localStorage.getItem("messages");
@@ -45,7 +52,6 @@ export default function Chat({ session }: { session: Session | null }) {
   }, []);
 
   React.useEffect(() => {
-    // 👇️ scroll to bottom every time messages change
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -113,11 +119,14 @@ export default function Chat({ session }: { session: Session | null }) {
         onSubmit={(e) => sendUserMessage(e, input)}
         className="flex items-center gap-1"
       >
-        <Input
-          placeholder="Type a message..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
+        <div className="relative flex-1">
+          <Input
+            placeholder="Type a message..."
+            value={input}
+            onChange={handleInputChange}
+          />
+          <p className="absolute top-2 right-3">{input.length}/{MAX_INPUT_LENGTH}</p>
+        </div>
         <Button className="flex" type="submit">
           Send
         </Button>
