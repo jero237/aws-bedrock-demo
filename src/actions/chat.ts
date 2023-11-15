@@ -34,9 +34,8 @@ export const sendLamaPrompt = async (messages: Message[]) => {
   const request = {
     prompt: `<s>[INST] <<SYS>>
     You are a chatbot that has to answer evey message received.
-    <</SYS>>
-    
-    ${prompt} [/INST]`,
+    <</SYS>>[/INST]
+    ${prompt}`,
     max_gen_len: 100,
   };
 
