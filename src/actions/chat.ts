@@ -29,14 +29,14 @@ export const sendLamaPrompt = async (messages: Message[]) => {
         return message.text;
       }
     })
-    .join("\n").slice(-600);
+    .join("\n").slice(-700);
 
   const request = {
     prompt: `<s>[INST] <<SYS>>
     You are a chatbot that has to answer evey message received.
     <</SYS>>[/INST]
     ${prompt}`,
-    max_gen_len: 100,
+    max_gen_len: 512,
   };
 
   const input = {
