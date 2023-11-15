@@ -6,9 +6,5 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
-  providers: [Cognito({
-    clientId: process.env.COGNITO_CLIENT_ID,
-    clientSecret: process.env.COGNITO_CLIENT_SECRET,
-    issuer: process.env.COGNITO_ISSUER,
-  })],
+  providers: [Cognito],
 })
