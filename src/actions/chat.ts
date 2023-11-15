@@ -8,8 +8,8 @@ import {
 const client = new BedrockRuntimeClient({
   region: "us-east-1",
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+    accessKeyId: process.env.AMAZON_KEY_ID as string,
+    secretAccessKey: process.env.AMAZON_KEY_SECRET as string,
   },
 });
 
