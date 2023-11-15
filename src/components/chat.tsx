@@ -121,6 +121,7 @@ export default function Chat({ session }: { session: Session | null }) {
           <Input
             placeholder="Type a message..."
             value={input}
+            autoFocus
             onChange={handleInputChange}
           />
           <p className="absolute top-2 right-3">{input.length}/{MAX_INPUT_LENGTH}</p>
