@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { format } from "date-fns";
 
 
 
@@ -59,6 +60,7 @@ export default function Chat({ session }: { session: Session | null }) {
       issuer: "user",
       text: message,
       key: nanoid(),
+      time: format(new Date(), 'p') 
     };
 
     setMessages([...messages, newMessage]);
@@ -68,6 +70,7 @@ export default function Chat({ session }: { session: Session | null }) {
       issuer: "bedrock",
       text: response.generation,
       key: nanoid(),
+      time: format(new Date(), 'p') 
     };
 
     setMessages([...messages, newMessage, newMessage2]);
@@ -99,8 +102,7 @@ export default function Chat({ session }: { session: Session | null }) {
         {messages.map((message, index) => (
           <ChatItem
             key={message.key}
-            issuer={message.issuer}
-            text={message.text}
+            message={message}
             userImage={session?.user?.image}
           />
         ))}

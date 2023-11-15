@@ -17,6 +17,7 @@ export interface Message {
   issuer: "user" | "bedrock";
   text: string;
   key: string;
+  time: string;
 }
 
 export const sendLamaPrompt = async (messages: Message[]) => {
