@@ -13,9 +13,30 @@ const client = new BedrockRuntimeClient({
   },
 });
 
-export const sendLamaPrompt = async (prompt: string) => {
+export interface Message {
+  issuer: "user" | "bedrock";
+  text: string;
+  key: string;
+}
+
+export const sendLamaPrompt = async (messages: Message[]) => {
+
+  const prompt = messages
+    .map((message) => {
+      if (message.issuer === "user") {
+        return `[INST]${message.text}[/INST]`;
+      } else {
+        return message.text;
+      }
+    })
+    .join("\n").slice(-600);
+
   const request = {
-    prompt: `This is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly. You will answer to this message: [${prompt}]`,
+    prompt: `<s>[INST] <<SYS>>
+    You are a chatbot that has to answer evey message received.
+    <</SYS>>
+    
+    ${prompt} [/INST]`,
     max_gen_len: 100,
   };
 
@@ -31,8 +52,8 @@ export const sendLamaPrompt = async (prompt: string) => {
     const response = await client.send(command);
     const completition = JSON.parse(
       Buffer.from(response.body).toString("utf-8")
-    )
-    console.log(completition)
+    );
+    console.log(completition);
     return completition;
   } catch (err) {
     console.log("Error", err);

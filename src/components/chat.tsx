@@ -4,7 +4,7 @@ import ChatItem from "./chat-item";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Session } from "next-auth";
-import { sendLamaPrompt } from "@/actions/chat";
+import { Message, sendLamaPrompt } from "@/actions/chat";
 import { nanoid } from "nanoid";
 import { Loader2, Trash } from "lucide-react";
 import CustomAlertDialog from "./alert-dialog";
@@ -16,11 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface Message {
-  issuer: "user" | "bedrock";
-  text: string;
-  key: string;
-}
+
 
 const MAX_INPUT_LENGTH = 100;
 
@@ -67,7 +63,7 @@ export default function Chat({ session }: { session: Session | null }) {
 
     setMessages([...messages, newMessage]);
     saveMessages([...messages, newMessage]);
-    const response = await sendLamaPrompt(message);
+    const response = await sendLamaPrompt([...messages, newMessage]);
     const newMessage2: Message = {
       issuer: "bedrock",
       text: response.generation,
