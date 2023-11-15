@@ -30,14 +30,11 @@ export const sendLamaPrompt = async (messages: Message[]) => {
         return message.text;
       }
     })
-    .join("\n").slice(-700);
+    .join("\n").slice(-1000);
 
   const request = {
-    prompt: `<s>[INST] <<SYS>>
-    You are a chatbot that has to answer evey message received.
-    <</SYS>>[/INST]
-    ${prompt}`,
-    max_gen_len: 512,
+    prompt,
+    max_gen_len: 1000,
   };
 
   const input = {
@@ -53,7 +50,6 @@ export const sendLamaPrompt = async (messages: Message[]) => {
     const completition = JSON.parse(
       Buffer.from(response.body).toString("utf-8")
     );
-    console.log(completition);
     return completition;
   } catch (err) {
     console.log("Error", err);
