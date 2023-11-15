@@ -46,7 +46,7 @@ export default function ChatItem({
         </div>
         <p className="text-sm text-muted-foreground">{message.time}</p>
       </div>
-      <p className="text-sm">{message.text}</p>
+      <p className="text-sm whitespace-pre-line">{message.text}</p>
     </div>
   );
 }
