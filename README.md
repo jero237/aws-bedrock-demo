@@ -41,8 +41,11 @@ To obtain the Cognito-related variables `(AUTH_COGNITO_ID, AUTH_COGNITO_SECRET, 
     1. In your User Pool, go to the "App integration tab" section.
     2. Create a new App client if necessary, ensuring you generate a client secret.
     3. While generating the app client, in Hosted UI settings, you have to use the following configurations:
+
     ![Alt text](/readme-assets/callback-config.png)
+    
     ![Alt text](/readme-assets/oauth-config.png)
+
     4. Note down the App client ID and the App client secret. These will be your `AUTH_COGNITO_ID` and `AUTH_COGNITO_SECRET`, respectively.
 
 #### Other Auth Variables
