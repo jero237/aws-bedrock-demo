@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import ChatItem from "./chat-item";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -33,7 +33,7 @@ export default function Chat({ session }: { session: Session | null }) {
     setInput(e.target.value);
   }
 
-  const loadMessages = async (message: string) => {
+  const loadMessages = async () => {
     const savedMessages = localStorage.getItem("messages");
     if (savedMessages) {
       setMessages(JSON.parse(savedMessages));
@@ -45,7 +45,7 @@ export default function Chat({ session }: { session: Session | null }) {
   };
 
   React.useEffect(() => {
-    loadMessages("");
+    loadMessages();
   }, []);
 
   React.useEffect(() => {
@@ -99,7 +99,7 @@ export default function Chat({ session }: { session: Session | null }) {
         </Select>
       </div>
       <div className="border rounded flex-1 overflow-y-scroll">
-        {messages.map((message, index) => (
+        {messages.map((message) => (
           <ChatItem
             key={message.key}
             message={message}
