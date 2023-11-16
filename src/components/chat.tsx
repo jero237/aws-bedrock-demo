@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import ChatItem from "./chat-item";
-import { Input } from "./ui/input";
+import { Input, TextArea } from "./ui/input";
 import { Button } from "./ui/button";
 import { Session } from "next-auth";
 import { Message, sendLamaPrompt } from "@/actions/chat";
 import { nanoid } from "nanoid";
-import { Loader2, Trash } from "lucide-react";
+import { ArrowUpIcon, Loader2, Trash } from "lucide-react";
 import CustomAlertDialog from "./alert-dialog";
 import {
   Select,
@@ -17,12 +17,11 @@ import {
 } from "@/components/ui/select";
 import { format } from "date-fns";
 
-
-
-const MAX_INPUT_LENGTH = 100;
+const MAX_INPUT_LENGTH = 250;
 
 export default function Chat({ session }: { session: Session | null }) {
   const bottomRef = React.useRef<null | HTMLDivElement>(null);
+  const inputRef = React.useRef<null | HTMLTextAreaElement>(null);
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState<string>("");
   const [loadingNewMessage, setLoadingNewMessage] =
@@ -31,13 +30,17 @@ export default function Chat({ session }: { session: Session | null }) {
   const handleInputChange = (e: any) => {
     if (e.target.value.length > MAX_INPUT_LENGTH) return;
     setInput(e.target.value);
-  }
+    adjustInputSize();
+  };
 
-  const loadMessages = async () => {
-    const savedMessages = localStorage.getItem("messages");
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    }
+  const adjustInputSize = (reset?: boolean) => {
+    const inputElement = inputRef.current;
+    if (!inputElement) return;
+
+    // Reset the element's height to auto before calculating the scroll height
+    inputElement.style.height = "3.5rem";
+    if (reset) return;
+    inputElement.style.height = `${inputElement.scrollHeight}px`;
   };
 
   const saveMessages = async (messages: Message[]) => {
@@ -45,7 +48,10 @@ export default function Chat({ session }: { session: Session | null }) {
   };
 
   React.useEffect(() => {
-    loadMessages();
+    const savedMessages = localStorage.getItem("messages");
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
   }, []);
 
   React.useEffect(() => {
@@ -54,27 +60,29 @@ export default function Chat({ session }: { session: Session | null }) {
 
   const sendUserMessage = async (e: any, message: string) => {
     e.preventDefault();
-    setLoadingNewMessage(true);
+    if(!message) return;
     setInput("");
+    adjustInputSize(true);
+    setLoadingNewMessage(true);
     const newMessage: Message = {
       issuer: "user",
       text: message,
       key: nanoid(),
-      time: format(new Date(), 'p') 
+      time: format(new Date(), "p"),
     };
 
     setMessages([...messages, newMessage]);
     saveMessages([...messages, newMessage]);
     const response = await sendLamaPrompt([...messages, newMessage]);
-    const newMessage2: Message = {
+    const responseMessage: Message = {
       issuer: "bedrock",
       text: response.generation,
       key: nanoid(),
-      time: format(new Date(), 'p') 
+      time: format(new Date(), "p"),
     };
 
-    setMessages([...messages, newMessage, newMessage2]);
-    saveMessages([...messages, newMessage, newMessage2]);
+    setMessages([...messages, newMessage, responseMessage]);
+    saveMessages([...messages, newMessage, responseMessage]);
     setLoadingNewMessage(false);
   };
 
@@ -113,29 +121,40 @@ export default function Chat({ session }: { session: Session | null }) {
           </div>
         )}
       </div>
-      <form
-        onSubmit={(e) => sendUserMessage(e, input)}
-        className="flex items-center gap-1"
-      >
+      <form onSubmit={(e) => sendUserMessage(e, input)} className="relative">
         <div className="relative flex-1">
-          <Input
+          <TextArea
+            ref={inputRef}
             placeholder="Type a message..."
             value={input}
             autoFocus
             onChange={handleInputChange}
+            className="py-4 h-14 pl-14 pr-24 overflow-hidden resize-none"
           />
-          <p className="absolute top-2 right-3">{input.length}/{MAX_INPUT_LENGTH}</p>
+          <p className="absolute bottom-5 right-14 text-xs">
+            {input.length}/{MAX_INPUT_LENGTH}
+          </p>
         </div>
-        <Button className="flex" type="submit">
-          Send
+        <Button
+          className="absolute bottom-2 right-2"
+          disabled={loadingNewMessage}
+          type="submit"
+          size="icon"
+        >
+          <ArrowUpIcon className="h-4 w-auto" />
         </Button>
         <CustomAlertDialog
           action={clearChat}
           description="This will permanently delete your chat history."
           title="Are you absolutely sure?"
           trigger={
-            <Button size={"icon"} variant={"secondary"}>
-              <Trash className="h-4 w-4" />
+            <Button
+              size={"icon"}
+              variant={"secondary"}
+              disabled={loadingNewMessage}
+              className="absolute bottom-2 left-2"
+            >
+              <Trash className="h-4 w-auto" />
             </Button>
           }
         />
