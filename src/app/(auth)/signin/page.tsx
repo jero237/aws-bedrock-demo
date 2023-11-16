@@ -16,7 +16,7 @@ export default function SignInPage() {
     <main>
       <Link
         href={routes.home}
-        className="absolute left-4 top-4 flex items-center"
+        className="absolute left-4 top-4 flex items-center z-10"
       >
         <ChevronLeft className="h-4 w-auto" />
         Back
