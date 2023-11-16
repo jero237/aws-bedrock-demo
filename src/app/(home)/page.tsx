@@ -17,10 +17,10 @@ export default async function HomePage() {
       />
       <div className="text-center">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          <Balancer>AWS Bedrock Chat</Balancer>
+          <Balancer>AWS Bedrock Showcase</Balancer>
         </h1>
         <p className="text-xl text-muted-foreground">
-          <Balancer>A ChatGPT like application built with AWS Bedrock</Balancer>
+          <Balancer>Explore the Synergy of AI Applications with AWS Bedrock in Our Interactive Demo Hub</Balancer>
         </p>
       </div>
       <Link
