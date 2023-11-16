@@ -8,6 +8,10 @@ Welcome to the AWS Bedrock Showcase - a Next.js application designed to demonstr
 
 AWS Bedrock is a robust cloud computing platform designed to facilitate the development and deployment of scalable and secure AI applications. It provides a wide range of tools and services that enable developers to build, train, and deploy machine learning models efficiently. With its powerful infrastructure, AWS Bedrock supports the handling of large datasets and complex AI algorithms, making it an ideal choice for enterprises and developers looking to leverage the power of artificial intelligence in their applications. Its integration capabilities with various AWS services ensure a seamless workflow, enhancing the overall development process.
 
+## Live Demo
+
+Link: https://main.d3nerrt8c5kd5o.amplifyapp.com/
+
 ## Getting Started
 
 ### Prerequisites
