@@ -1,6 +1,6 @@
 const routes = {
     home: '/',
-    login: '/api/auth/signin',
+    login: '/signin',
     logout: '/api/auth/signout',
     dashboard: '/dashboard',
     chat: '/dashboard/chat',
